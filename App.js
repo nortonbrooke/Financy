@@ -75,16 +75,16 @@ export default function App(props) {
               alert("Sign in Failed", "Email address is not valid");
               break;
             case "auth/user-disabled":
-              alert("Sign in Failed", "Account has been disabled");
+              alert("Sign in Failed", "Your account has been disabled");
               break;
             case "auth/user-not-found":
-              alert("Sign in Failed", "Account not found");
+              alert("Sign in Failed", "No account was found for the email provided");
               break;
             case "auth/wrong-password":
-              alert("Sign in Failed", "Wrong password");
+              alert("Sign in Failed", "The password entered is incorrect");
               break;
             case "auth/too-many-requests":
-              alert("Sign in Failed", "Too many sign in attempts");
+              alert("Sign in Failed", "You've attempted to sign in too many times, try again later");
               break;
             default:
               alert("Sign in Failed", error.message);

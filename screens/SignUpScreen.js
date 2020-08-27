@@ -11,6 +11,7 @@ import { ThemeContext } from "../contexts/theme";
 import { AuthContext } from "../contexts/auth";
 import { validator } from "../util";
 import { isEmpty } from "lodash";
+import Colors from "../constants/Colors";
 
 export default function SignUpScreen({ navigation }) {
   const [name, setName] = useState("");
@@ -27,6 +28,12 @@ export default function SignUpScreen({ navigation }) {
   const nameValid = !isEmpty(name);
   const emailValid = validator.isValidEmail(email);
   const passwordValid = validator.isValidPassword(password);
+  const passwordValidSteps = {
+    hasUppercase: validator.containsUppercase(password),
+    hasLowercase: validator.containsLowercase(password),
+    hasNumbers: validator.containsNumbers(password),
+    meetsLength: validator.passwordMeetsMinLength(password),
+  };
   const formValid = nameValid && emailValid && passwordValid;
 
   // Helpers
@@ -42,13 +49,21 @@ export default function SignUpScreen({ navigation }) {
     } else if (!passwordValid) {
       alert(
         "Invalid Password",
-        "Password must be 8 characters long and contain upper and lowercase letters"
+        "Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters"
       );
     }
   };
 
   const alert = (title, message) =>
     Alert.alert(title, message, [{ text: "OK" }], { cancelable: false });
+
+  const bubbleStyle = {
+    height: 10,
+    width: 10,
+    borderRadius: 10,
+    marginRight: 10,
+    borderWidth: 1,
+  };
 
   return (
     <View
@@ -85,6 +100,65 @@ export default function SignUpScreen({ navigation }) {
             {showPassword ? "Hide" : "Show"}
           </Link>
         </TextInput>
+        <View style={styles.validationContainer}>
+          <View style={styles.validationTextContainer}><Text>Password requirements:</Text></View>
+          <View style={styles.validationItemContainer}>
+            <View
+              style={{
+                ...bubbleStyle,
+                borderColor: passwordValidSteps.hasLowercase
+                  ? "transparent"
+                  : theme.foreground,
+                backgroundColor: passwordValidSteps.hasLowercase
+                  ? Colors.tintColor
+                  : "transparent",
+              }}
+            ></View>
+            <Text>At least one lowercase letter</Text>
+          </View>
+          <View style={styles.validationItemContainer}>
+            <View
+              style={{
+                ...bubbleStyle,
+                borderColor: passwordValidSteps.hasUppercase
+                  ? "transparent"
+                  : theme.foreground,
+                backgroundColor: passwordValidSteps.hasUppercase
+                  ? Colors.tintColor
+                  : "transparent",
+              }}
+            ></View>
+            <Text>At least one uppercase letter</Text>
+          </View>
+          <View style={styles.validationItemContainer}>
+            <View
+              style={{
+                ...bubbleStyle,
+                borderColor: passwordValidSteps.hasNumbers
+                  ? "transparent"
+                  : theme.foreground,
+                backgroundColor: passwordValidSteps.hasNumbers
+                  ? Colors.tintColor
+                  : "transparent",
+              }}
+            ></View>
+            <Text>At least one number</Text>
+          </View>
+          <View style={styles.validationItemContainer}>
+            <View
+              style={{
+                ...bubbleStyle,
+                borderColor: passwordValidSteps.meetsLength
+                  ? "transparent"
+                  : theme.foreground,
+                backgroundColor: passwordValidSteps.meetsLength
+                  ? Colors.tintColor
+                  : "transparent",
+              }}
+            ></View>
+            <Text>Be at least 8 characters</Text>
+          </View>
+        </View>
         <View style={styles.textContainer}>
           <Text>By creating an account, you agree to our </Text>
           <Link
@@ -127,5 +201,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     marginBottom: 20,
+  },
+  validationContainer: {
+    marginBottom: 20
+  },
+  validationTextContainer: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginBottom: 10,
+  },
+  validationItemContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
