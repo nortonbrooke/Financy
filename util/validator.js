@@ -12,14 +12,14 @@ export default {
       // Meets minimum length
       isLength(password, { min: MIN_PASSWORD_LENGTH, max: undefined }) &&
       // Contains uppercase and lowercase letters and numbers
-      matches(password, /[^A-Z][^a-z][^0-9]/)
+      matches(password, /[a-zA-Z0-9]+/)
     );
   },
 
   passwordMeetsMinLength: (password) =>
     isLength(password, { min: MIN_PASSWORD_LENGTH, max: undefined }),
 
-  containsUppercase: (str) => matches(str, /[A-Z]/),
   containsLowercase: (str) => matches(str, /[a-z]/),
+  containsUppercase: (str) => matches(str, /[A-Z]/),
   containsNumbers: (str) => matches(str, /[0-9]/),
 };

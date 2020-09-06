@@ -6,45 +6,61 @@ import firebaseConfig from "./firebaseConfig";
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-const auth = firebase.auth();
-const firestore = firebase.firestore;
-const db = firestore();
-
 const API = {
   authenticate: {
     signIn: (data) => {
       const { email, password } = data;
-      return auth.signInWithEmailAndPassword(email, password);
+      return firebase.auth().signInWithEmailAndPassword(email, password);
     },
 
     signUp: (data) => {
       const { email, password } = data;
-      return auth.createUserWithEmailAndPassword(email, password);
+      return firebase.auth().createUserWithEmailAndPassword(email, password);
     },
 
     signOut: () => {
-      return auth.signOut();
+      return firebase.auth().signOut();
     },
 
     isSignedIn: (callback) => {
-      return auth.onAuthStateChanged(callback);
+      return firebase.auth().onAuthStateChanged(callback);
+    },
+
+    getCurrentUser: () => {
+      return firebase.auth().currentUser;
     },
   },
   emails: {
     sendPasswordResetEmail: (data) => {
       const { email } = data;
-      return auth.sendPasswordResetEmail(email);
+      return firebase.auth().sendPasswordResetEmail(email);
     },
   },
   users: {
     create: (data) => {
+      const id = firebase.auth().currentUser.uid;
       const { name, email } = data;
-      const doc = {
-        name: name,
-        email: email,
-        joined: firestore.Timestamp.fromDate(new Date()),
-      };
-      return db.collection("users").add(doc);
+      return firebase
+        .firestore()
+        .collection("users")
+        .doc(id)
+        .set({
+          name,
+          email,
+          created: firebase.firestore.Timestamp.fromDate(new Date()),
+        });
+    },
+    subscribe: (callback) => {
+      const id = firebase.auth().currentUser.uid;
+      return firebase
+        .firestore()
+        .collection("users")
+        .doc(id)
+        .onSnapshot(callback);
+    },
+    update: (data) => {
+      const id = firebase.auth().currentUser.uid;
+      return firebase.firestore().collection("users").doc(id).update(data);
     },
   },
 };

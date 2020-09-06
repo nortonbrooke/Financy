@@ -38,7 +38,7 @@ const Stack = createStackNavigator();
 
 export default function App(props) {
   // Resources
-  const isLoadingComplete = useCachedResources();
+  const resourcesLoaded = useCachedResources();
 
   // Authentication
   const { authenticate, users } = useContext(APIContext);
@@ -58,38 +58,72 @@ export default function App(props) {
     get(styleTypes, colorScheme, "light")
   );
 
+  // Error Handling
+  const _handleSignInFailure = (error) => {
+    switch (error.code) {
+      case "auth/invalid-email":
+        alert("Sign in Failed", "Email is not valid");
+        break;
+      case "auth/user-disabled":
+        alert("Sign in Failed", "Your account has been disabled");
+        break;
+      case "auth/user-not-found":
+        alert("Sign in Failed", "No account was found for the email provided");
+        break;
+      case "auth/wrong-password":
+        alert("Sign in Failed", "The password entered is incorrect");
+        break;
+      case "auth/too-many-requests":
+        alert(
+          "Sign in Failed",
+          "You've attempted to sign in too many times, try again later"
+        );
+        break;
+      default:
+        alert("Sign in Failed", error.message);
+        break;
+    }
+  };
+
+  const _handleSignUpFailure = (error) => {
+    switch (error.code) {
+      case "auth/invalid-email":
+        alert("Sign up Failed", "Email is not valid");
+        break;
+      case "auth/email-already-in-use":
+        alert("Sign up Failed", "Email is already in use");
+        break;
+      case "auth/operation-not-allowed":
+        alert("Sign up Failed", "Unable to create account");
+        break;
+      case "auth/weak-password":
+        alert("Sign up Failed", "Password is too weak");
+        break;
+      default:
+        alert("Sign up Failed", error.message);
+        break;
+    }
+  };
+
   const auth = useMemo(
     () => ({
       signIn: async (data) => {
         try {
           const response = await authenticate.signIn(data);
           const { user } = response;
-
           if (user) {
-            AsyncStorage.setItem("userToken", user.uid);
-            authDispatch({ type: SIGN_IN, userToken: user.uid });
+            user
+              .getIdToken()
+              .then((userToken) => {
+                AsyncStorage.setItem("userToken", userToken);
+                authDispatch({ type: SIGN_IN, userToken });
+              })
+              .catch((error) => {
+                console.log(error.message);
+              });
           }
         } catch (error) {
-          switch (error.code) {
-            case "auth/invalid-email":
-              alert("Sign in Failed", "Email address is not valid");
-              break;
-            case "auth/user-disabled":
-              alert("Sign in Failed", "Your account has been disabled");
-              break;
-            case "auth/user-not-found":
-              alert("Sign in Failed", "No account was found for the email provided");
-              break;
-            case "auth/wrong-password":
-              alert("Sign in Failed", "The password entered is incorrect");
-              break;
-            case "auth/too-many-requests":
-              alert("Sign in Failed", "You've attempted to sign in too many times, try again later");
-              break;
-            default:
-              alert("Sign in Failed", error.message);
-              break;
-          }
+          _handleSignInFailure(error);
         }
       },
 
@@ -99,7 +133,7 @@ export default function App(props) {
           AsyncStorage.removeItem("userToken");
           authDispatch({ type: SIGN_OUT });
         } catch (error) {
-          console.log(error.message);
+          alert("Sign out Failed", "Could not sign out, please try again");
         }
       },
 
@@ -107,37 +141,26 @@ export default function App(props) {
         try {
           const response = await authenticate.signUp(data);
           const { user } = response;
-
           if (user) {
-            AsyncStorage.setItem("userToken", user.uid);
-            users
-              .create(data)
-              .then(function (docRef) {
-                console.log("Document written with ID: ", docRef.id);
-                authDispatch({ type: SIGN_IN, userToken: user.uid });
+            user
+              .getIdToken()
+              .then((userToken) => {
+                AsyncStorage.setItem("userToken", userToken);
+                users
+                  .create(data)
+                  .then(() => {
+                    authDispatch({ type: SIGN_IN, userToken });
+                  })
+                  .catch((error) => {
+                    console.log(error.message);
+                  });
               })
-              .catch(function (error) {
-                console.error("Error adding document: ", error);
+              .catch((error) => {
+                console.log(error.message);
               });
           }
         } catch (error) {
-          switch (error.code) {
-            case "auth/invalid-email":
-              alert("Sign up Failed", "Email address is not valid");
-              break;
-            case "auth/email-already-in-use":
-              alert("Sign up Failed", "Email address is already in use");
-              break;
-            case "auth/operation-not-allowed":
-              alert("Sign up Failed", "Unable to create account");
-              break;
-            case "auth/weak-password":
-              alert("Sign up Failed", "Password is too weak");
-              break;
-            default:
-              alert("Sign up Failed", error.message);
-              break;
-          }
+          _handleSignUpFailure(error);
         }
       },
     }),
@@ -151,8 +174,8 @@ export default function App(props) {
       setStyleStatusBar(get(styleTypes, colorScheme, "light"));
     });
 
-    // Fetch the user from storage then navigate to our appropriate place
-    let bootstrapAsync = async () => {
+    // Check user authentication
+    let loadUserSession = async () => {
       let userToken;
 
       try {
@@ -165,19 +188,26 @@ export default function App(props) {
         try {
           await authenticate.isSignedIn((user) => {
             if (user) {
-              authDispatch({ type: RESTORE_USER, userToken: user.uid });
+              user
+                .getIdToken()
+                .then((userToken) => {
+                  authDispatch({ type: RESTORE_USER, userToken });
+                })
+                .catch((error) => {
+                  console.log(error.message);
+                });
             }
           });
         } catch (error) {
-          console.log(error);
+          console.log(error.message);
         }
       }
     };
 
-    bootstrapAsync();
+    loadUserSession();
 
-    return function cleanup() {
-      bootstrapAsync = null;
+    return () => {
+      loadUserSession = null;
       subscription.remove();
     };
   }, []);
@@ -185,7 +215,7 @@ export default function App(props) {
   const alert = (title, message) =>
     Alert.alert(title, message, [{ text: "OK" }], { cancelable: false });
 
-  if (!isLoadingComplete) {
+  if (!resourcesLoaded) {
     return <SplashScreen></SplashScreen>;
   } else if (authState.loading) {
     return <Text>Checking auth...</Text>; // TODO: authenticating screen
@@ -195,7 +225,6 @@ export default function App(props) {
         <AuthProvider value={auth}>
           <ThemeProvider value={theme}>
             <StatusBar barStyle={styleStatusBar} />
-
             <NavigationContainer linking={LinkingConfiguration}>
               <Stack.Navigator>
                 {authState.userToken == null ? (
