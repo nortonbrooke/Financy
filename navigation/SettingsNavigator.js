@@ -3,11 +3,11 @@ import React from "react";
 import SettingsHomeScreen from "../screens/Settings/SettingsHomeScreen";
 import AccountScreen from "../screens/Settings/AccountScreen";
 import UpdateNameScreen from "../screens/Settings/UpdateNameScreen";
+import UpdatePasswordScreen from "../screens/Settings/UpdatePasswordScreen";
 
 const Stack = createStackNavigator();
 
 export default function StackNavigator({}) {
-
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -30,7 +30,14 @@ export default function StackNavigator({}) {
         options={{
           title: "Update Name",
         }}
-    />
+      />
+      <Stack.Screen
+        name="UpdatePassword"
+        component={UpdatePasswordScreen}
+        options={{
+          title: "Update Password",
+        }}
+      />
     </Stack.Navigator>
   );
 }

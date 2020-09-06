@@ -40,7 +40,11 @@ export default function AccountScreen({ navigation }) {
               ></StackButton>
               <StackButton
                 label="Password"
-                value="Reset Password"
+                onPress={() =>
+                  navigation.navigate({
+                    name: "UpdatePassword",
+                  })
+                }
               ></StackButton>
               <StackButton
                 label="Created"

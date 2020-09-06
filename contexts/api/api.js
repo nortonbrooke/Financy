@@ -29,6 +29,18 @@ const API = {
     getCurrentUser: () => {
       return firebase.auth().currentUser;
     },
+
+    reauthenticate: (password) => {
+      const user = firebase.auth().currentUser;
+      return user.reauthenticateWithCredential(
+        firebase.auth.EmailAuthProvider.credential(user.email, password)
+      );
+    },
+
+    updatePassword: (newPassword) => {
+      const user = firebase.auth().currentUser;
+      return user.updatePassword(newPassword);
+    },
   },
   emails: {
     sendPasswordResetEmail: (data) => {
