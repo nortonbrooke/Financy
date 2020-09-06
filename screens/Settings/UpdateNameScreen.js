@@ -49,7 +49,7 @@ const UpdateNameScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <View style={styles.contentContainer}>
-        <BackButton onPress={() => navigation.navigate("Account")}></BackButton>
+        <BackButton onPress={() => navigation.navigate("Account")}>Back</BackButton>
         <View style={styles.formContainer}>
           <Header>Update Name</Header>
           <TextInput
