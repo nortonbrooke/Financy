@@ -83,6 +83,7 @@ const UpdateNameScreen = ({ navigation }) => {
             textContentType="password"
             onChangeText={setCurrentPassword}
             secureTextEntry={!showCurrentPassword}
+            autoFocus={true}
           >
             <Link onPress={() => setShowCurrentPassword(!showCurrentPassword)}>
               {showCurrentPassword ? "Hide" : "Show"}
