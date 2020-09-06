@@ -1,13 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import moment from "moment";
 import { SafeAreaView, View, ScrollView, StyleSheet, Text } from "react-native";
-import { ThemeContext } from "../../contexts/theme";
-import useUser from "../../hooks/useUser";
-import BackButton from "../../components/Buttons/BackButton";
-import Header from "../../components/Headers/Header";
-import StyledButton from "../../components/Buttons/StyledButton";
-import StackButton from "../../components/Buttons/StackButton";
-import Colors from "../../constants/Colors";
+import { ThemeContext } from "../../../contexts/theme";
+import useUser from "../../../hooks/useUser";
+import BackButton from "../../../components/Buttons/BackButton";
+import Header from "../../../components/Headers/Header";
+import StyledButton from "../../../components/Buttons/StyledButton";
+import StackButton from "../../../components/Buttons/StackButton";
+import Colors from "../../../constants/Colors";
 
 export default function AccountScreen({ navigation }) {
   const theme = useContext(ThemeContext);
@@ -16,9 +16,9 @@ export default function AccountScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <View style={styles.contentContainer}>
-        <BackButton
-          onPress={() => navigation.navigate("SettingsHome")}
-        >Settings</BackButton>
+        <BackButton onPress={() => navigation.navigate("SettingsHome")}>
+          Settings
+        </BackButton>
         {user ? (
           <ScrollView>
             <View style={styles.sectionContainer}>

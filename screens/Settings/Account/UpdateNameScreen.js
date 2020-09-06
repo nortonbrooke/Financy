@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import { SafeAreaView, StyleSheet, View, Alert } from "react-native";
-import Button from "../../components/Buttons/Button";
-import BackButton from "../../components/Buttons/BackButton";
-import Header from "../../components/Headers/Header";
-import TextInput from "../../components/TextInput";
-import { APIContext } from "../../contexts/api";
-import { ThemeContext } from "../../contexts/theme";
+import Button from "../../../components/Buttons/Button";
+import BackButton from "../../../components/Buttons/BackButton";
+import Header from "../../../components/Headers/Header";
+import TextInput from "../../../components/TextInput";
+import { APIContext } from "../../../contexts/api";
+import { ThemeContext } from "../../../contexts/theme";
 import { isEmpty } from "lodash";
 
 const UpdateNameScreen = ({ navigation, route }) => {
@@ -58,7 +58,7 @@ const UpdateNameScreen = ({ navigation, route }) => {
             onChangeText={setName}
           ></TextInput>
           <Button onPress={_handleOnSave}>
-            {loading ? "Updating..." : "Update"}
+            {loading ? "Processing..." : "Continue"}
           </Button>
         </View>
       </View>

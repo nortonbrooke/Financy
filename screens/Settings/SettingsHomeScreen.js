@@ -38,18 +38,18 @@ export default function SettingsHomeScreen({ navigation }) {
           </View>
           <View style={styles.sectionContainer}>
             <SubHeader>Preferences</SubHeader>
+            <StackButton
+              label="App Appearance"
+              onPress={() => navigation.navigate("Appearance")}
+            ></StackButton>
             <StackButton label="Notifications"></StackButton>
-            <StackButton label="App Appearance"></StackButton>
           </View>
           <View style={styles.sectionContainer}>
             <SubHeader>Security</SubHeader>
             <StackButton label="Device Security"></StackButton>
             <StackButton label="Two-Factor Authentication"></StackButton>
           </View>
-          <StyledButton
-            color={Colors.tintColor}
-            onPress={() => signOut()}
-          >
+          <StyledButton color={Colors.tintColor} onPress={confirmSignOut}>
             Sign out
           </StyledButton>
         </ScrollView>

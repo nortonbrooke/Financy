@@ -20,8 +20,8 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { APIContext } from "./contexts/api";
 import { AuthProvider } from "./contexts/auth";
 import { ThemeProvider, themes } from "./contexts/theme";
-
 import useCachedResources from "./hooks/useCachedResources";
+import useUser from "./hooks/useUser";
 import AuthNavigator from "./navigation/AuthNavigator";
 import AppNavigator from "./navigation/AppNavigator";
 import LinkingConfiguration from "./navigation/LinkingConfiguration";
@@ -32,21 +32,23 @@ import authReducer, {
   RESTORE_USER,
 } from "./reducers/auth";
 import SplashScreen from "./screens/SplashScreen";
-import { get } from "lodash";
+import { get, isEqual } from "lodash";
 
+const DEFAULT_THEME = "light";
 const Stack = createStackNavigator();
 
 export default function App(props) {
   // Resources
   const resourcesLoaded = useCachedResources();
+  const user = useUser();
 
   // Authentication
-  const { authenticate, users } = useContext(APIContext);
+  const { auth, users } = useContext(APIContext);
   const [authState, authDispatch] = useReducer(authReducer, authInitialState);
 
   // Theme
   const colorScheme = Appearance.getColorScheme();
-  const [theme, setTheme] = useState(get(themes, colorScheme, "light"));
+  const [theme, setTheme] = useState(get(themes, colorScheme, DEFAULT_THEME));
 
   // Status bar
   const styleTypes = {
@@ -55,7 +57,7 @@ export default function App(props) {
     dark: "light-content",
   };
   const [styleStatusBar, setStyleStatusBar] = useState(
-    get(styleTypes, colorScheme, "light")
+    get(styleTypes, colorScheme, DEFAULT_THEME)
   );
 
   // Error Handling
@@ -105,11 +107,11 @@ export default function App(props) {
     }
   };
 
-  const auth = useMemo(
+  const authService = useMemo(
     () => ({
       signIn: async (data) => {
         try {
-          const response = await authenticate.signIn(data);
+          const response = await auth.signIn(data);
           const { user } = response;
           if (user) {
             user
@@ -129,7 +131,7 @@ export default function App(props) {
 
       signOut: async () => {
         try {
-          await authenticate.signOut();
+          await auth.signOut();
           AsyncStorage.removeItem("userToken");
           authDispatch({ type: SIGN_OUT });
         } catch (error) {
@@ -139,7 +141,7 @@ export default function App(props) {
 
       signUp: async (data) => {
         try {
-          const response = await authenticate.signUp(data);
+          const response = await auth.signUp(data);
           const { user } = response;
           if (user) {
             user
@@ -167,14 +169,8 @@ export default function App(props) {
     []
   );
 
+  // User Session
   useEffect(() => {
-    // Subscribe to appearance
-    let subscription = Appearance.addChangeListener(({ colorScheme }) => {
-      setTheme(get(themes, colorScheme, "light"));
-      setStyleStatusBar(get(styleTypes, colorScheme, "light"));
-    });
-
-    // Check user authentication
     let loadUserSession = async () => {
       let userToken;
 
@@ -186,7 +182,7 @@ export default function App(props) {
 
       if (userToken) {
         try {
-          await authenticate.isSignedIn((user) => {
+          await auth.onAuthStateChanged((user) => {
             if (user) {
               user
                 .getIdToken()
@@ -208,9 +204,34 @@ export default function App(props) {
 
     return () => {
       loadUserSession = null;
-      subscription.remove();
     };
   }, []);
+
+  // User Preferences
+  useEffect(() => {
+    const _handleThemeChange = (value) => {
+      setTheme(get(themes, value, DEFAULT_THEME));
+      setStyleStatusBar(get(styleTypes, value, DEFAULT_THEME));
+    };
+
+    let appearanceSubscription = Appearance.addChangeListener(
+      ({ colorScheme }) => {
+        if (isEqual(user.preferences.theme, "system")) {
+          _handleThemeChange(colorScheme);
+        }
+      }
+    );
+
+    if (user && !isEqual(user.preferences.theme, "system")) {
+      _handleThemeChange(user.preferences.theme);
+    } else {
+      _handleThemeChange(Appearance.getColorScheme());
+    }
+
+    return () => {
+      appearanceSubscription.remove();
+    };
+  }, [user]);
 
   const alert = (title, message) =>
     Alert.alert(title, message, [{ text: "OK" }], { cancelable: false });
@@ -222,7 +243,7 @@ export default function App(props) {
   } else {
     return (
       <View style={styles.container}>
-        <AuthProvider value={auth}>
+        <AuthProvider value={authService}>
           <ThemeProvider value={theme}>
             <StatusBar barStyle={styleStatusBar} />
             <NavigationContainer linking={LinkingConfiguration}>

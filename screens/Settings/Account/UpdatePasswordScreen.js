@@ -1,18 +1,18 @@
 import React, { useContext, useState } from "react";
 import { SafeAreaView, StyleSheet, View, Alert } from "react-native";
-import Button from "../../components/Buttons/Button";
-import BackButton from "../../components/Buttons/BackButton";
-import Link from "../../components/Link";
-import Header from "../../components/Headers/Header";
-import Text from "../../components/Text";
-import TextInput from "../../components/TextInput";
-import { APIContext } from "../../contexts/api";
-import { ThemeContext } from "../../contexts/theme";
-import { validator } from "../../util";
+import Button from "../../../components/Buttons/Button";
+import BackButton from "../../../components/Buttons/BackButton";
+import Link from "../../../components/Link";
+import Header from "../../../components/Headers/Header";
+import Text from "../../../components/Text";
+import TextInput from "../../../components/TextInput";
+import { APIContext } from "../../../contexts/api";
+import { ThemeContext } from "../../../contexts/theme";
+import { validator } from "../../../util";
 import { isEmpty } from "lodash";
 
 const UpdateNameScreen = ({ navigation }) => {
-  const { authenticate } = useContext(APIContext);
+  const { auth } = useContext(APIContext);
   const theme = useContext(ThemeContext);
 
   const [currentPassword, setCurrentPassword] = useState("");
@@ -41,10 +41,10 @@ const UpdateNameScreen = ({ navigation }) => {
     }
 
     setLoading(true);
-    authenticate
+    auth
       .reauthenticate(currentPassword)
       .then(() => {
-        authenticate
+        auth
           .updatePassword(newPassword)
           .then(() => {
             setLoading(false);
@@ -77,7 +77,7 @@ const UpdateNameScreen = ({ navigation }) => {
       <View style={styles.contentContainer}>
         <BackButton onPress={() => navigation.navigate("Account")}>Back</BackButton>
         <View style={styles.formContainer}>
-          <Header>Update Password</Header>
+          <Header>Change Password</Header>
           <TextInput
             placeholder="Current password"
             textContentType="password"
@@ -106,7 +106,7 @@ const UpdateNameScreen = ({ navigation }) => {
             </Text>
           </View>
           <Button onPress={_handleOnSave}>
-            {loading ? "Updating..." : "Update"}
+            {loading ? "Processing..." : "Continue"}
           </Button>
         </View>
       </View>

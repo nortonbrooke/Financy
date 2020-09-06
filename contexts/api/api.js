@@ -2,12 +2,15 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import firebaseConfig from "./firebaseConfig";
+import { isNil } from 'lodash';
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 const API = {
-  authenticate: {
+  auth: {
+    isSignedIn: () => !isNil(firebase.auth().currentUser),
+
     signIn: (data) => {
       const { email, password } = data;
       return firebase.auth().signInWithEmailAndPassword(email, password);
@@ -22,12 +25,12 @@ const API = {
       return firebase.auth().signOut();
     },
 
-    isSignedIn: (callback) => {
-      return firebase.auth().onAuthStateChanged(callback);
-    },
-
     getCurrentUser: () => {
       return firebase.auth().currentUser;
+    },
+
+    onAuthStateChanged: (callback) => {
+      return firebase.auth().onAuthStateChanged(callback);
     },
 
     reauthenticate: (password) => {
@@ -60,6 +63,9 @@ const API = {
           name,
           email,
           created: firebase.firestore.Timestamp.fromDate(new Date()),
+          preferences: {
+            theme: "system"
+          }
         });
     },
     subscribe: (callback) => {
