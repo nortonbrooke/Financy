@@ -5,8 +5,6 @@ import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import ResetPassword from "../screens/ResetPassword";
 
-const INITIAL_ROUTE_NAME = "SignIn";
-
 const Stack = createStackNavigator();
 
 export default function StackNavigator({ navigation, route }) {

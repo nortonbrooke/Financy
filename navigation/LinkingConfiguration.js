@@ -8,8 +8,8 @@ export default {
       screens: {
         Home: 'home',
         Money: 'money',
-        Summary: 'summary',
-        Account: 'account',
+        Analyze: 'analyze',
+        Settings: 'settings',
         SignIn: 'signin',
         SignUp: 'signup',
         ResetPassword:'reset-password'

@@ -5,8 +5,9 @@ import TabBarIcon from "../components/TabBarIcon";
 import HomeScreen from "../screens/HomeScreen";
 import MoneyScreen from "../screens/MoneyScreen";
 import AnalyzeScreen from "../screens/AnalyzeScreen";
-import AccountScreen from "../screens/AccountScreen";
+import SettingsScreen from "../screens/SettingsScreen";
 import Colors from "../constants/Colors";
+import { isEmpty } from "lodash";
 
 const INITIAL_ROUTE_NAME = "Home";
 
@@ -14,21 +15,33 @@ const Tab = createBottomTabNavigator();
 
 export default function TabNavigator({ navigation, route }) {
   const theme = useContext(ThemeContext);
+  const headerTitle = getHeaderTitle(route);
 
-  navigation.setOptions({
-    headerStyle: {
-      backgroundColor: theme.background,
-      borderBottomWidth: 0,
-      shadowColor: "transparent",
-    },
-    headerTitle: getHeaderTitle(route),
-    headerTitleAlign: "left",
-    headerTintColor: theme.foreground,
-    headerTitleStyle: {
-      fontSize: 26,
-      fontWeight: "bold",
-    },
-  });
+  if (isEmpty(headerTitle)) {
+    navigation.setOptions({
+      headerStyle: {
+        height: 0,
+        borderBottomWidth: 0,
+        shadowColor: "transparent",
+      },
+      headerTitle: headerTitle,
+    });
+  } else {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: theme.background,
+        borderBottomWidth: 0,
+        shadowColor: "transparent",
+      },
+      headerTitle: headerTitle,
+      headerTitleAlign: "left",
+      headerTintColor: theme.foreground,
+      headerTitleStyle: {
+        fontSize: 26,
+        fontWeight: "bold",
+      },
+    });
+  }
 
   return (
     <Tab.Navigator
@@ -77,10 +90,10 @@ export default function TabNavigator({ navigation, route }) {
         }}
       />
       <Tab.Screen
-        name="Account"
-        component={AccountScreen}
+        name="Settings"
+        component={SettingsScreen}
         options={{
-          title: "Account",
+          title: "Settings",
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name="user-astronaut" />
           ),
@@ -91,9 +104,14 @@ export default function TabNavigator({ navigation, route }) {
 }
 
 function getHeaderTitle(route) {
-  const routeName =
-    route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+  const currentRoute = route.state?.routes[route.state.index];
 
+  // Check for nested route
+  if (currentRoute?.state?.routes[0]?.state?.index > 0) {
+    return "";
+  }
+
+  const routeName = currentRoute?.name ?? INITIAL_ROUTE_NAME;
   switch (routeName) {
     case "Home":
       return "";
@@ -101,7 +119,7 @@ function getHeaderTitle(route) {
       return "Money";
     case "Analyze":
       return "Analyze";
-    case "Account":
-      return "Account";
+    case "Settings":
+      return "Settings";
   }
 }
