@@ -1,10 +1,11 @@
 const tintColor = "#00c805";
 
-const white = "#ffffff";
-const black = "#000000";
+const white = "#fff";
+const black = "#000";
+const grey = "#aaa";
 
-const lightBackground = "#eeeeee";
-const darkBackground = "#222222";
+const lightBackground = "#eee";
+const darkBackground = "#222";
 
 export default {
   tintColor,
@@ -13,8 +14,9 @@ export default {
 
   white,
   black,
+  grey,
 
-  tabIconDefault: "#aaa",
+  tabIconDefault: grey,
 
   errorBackground: "red",
   errorText: white,
@@ -24,4 +26,6 @@ export default {
 
   noticeBackground: tintColor,
   noticeText: white,
+
+  dangerText: "red",
 };

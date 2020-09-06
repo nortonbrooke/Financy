@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Text } from "react-native";
-import { ThemeContext } from "../contexts/theme";
+import { ThemeContext } from "../../contexts/theme";
 
 const Header = (props) => {
   const theme = useContext(ThemeContext);
@@ -8,7 +8,12 @@ const Header = (props) => {
   return (
     <Text
       {...props}
-      style={{ fontSize: 30, color: theme.foreground, marginBottom: 20 }}
+      style={{
+        fontSize: 26,
+        fontWeight: "bold",
+        marginBottom: 10,
+        color: theme.foreground,
+      }}
     />
   );
 };

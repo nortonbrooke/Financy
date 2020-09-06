@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { Text, TouchableOpacity } from "react-native";
-import { ThemeContext } from "../contexts/theme";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { ThemeContext } from "../../contexts/theme";
 import { noop } from "lodash/noop";
+import Colors from "../../constants/Colors";
 
 const Link = (props) => {
   const theme = useContext(ThemeContext);
@@ -14,8 +15,10 @@ const Link = (props) => {
   };
 
   return (
-    <TouchableOpacity onPress={_handleOnPress}>
-      <Text style={{ fontSize: 14, color: theme.foreground }}>
+    <TouchableOpacity style={styles.container} onPress={_handleOnPress}>
+      <Text
+        style={{ fontWeight: "bold", color: props.color || theme.foreground }}
+      >
         {props.children}
       </Text>
     </TouchableOpacity>
@@ -25,13 +28,20 @@ const Link = (props) => {
 Link.defaultProps = {
   onPress: noop,
   disabled: false,
-  underline: false,
+  color: Colors.black,
 };
 
 Link.propTypes = {
   onPress: PropTypes.func,
   disabled: PropTypes.bool,
-  underline: PropTypes.bool,
+  color: PropTypes.string,
 };
+
+const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    alignItems: "center",
+  },
+});
 
 export default Link;

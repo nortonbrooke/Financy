@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { TextInput, View, StyleSheet } from "react-native";
 import { ThemeContext } from "../contexts/theme";
+import Colors from "../constants/Colors";
 import { omit } from "lodash";
 
 const StyledTextInput = (props) => {
@@ -20,7 +21,7 @@ const StyledTextInput = (props) => {
           borderBottomColor: theme.foreground,
           paddingRight: props.children ? 35 : 0,
         }}
-        placeholderTextColor={theme.foreground}
+        placeholderTextColor={Colors.grey}
       />
       {props.children && (
         <View style={styles.inputAddon}>{props.children}</View>

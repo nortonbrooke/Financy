@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import Colors from "../constants/Colors";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import Colors from "../../constants/Colors";
 import { noop } from "lodash/noop";
 
 const Button = (props) => {
@@ -12,10 +12,8 @@ const Button = (props) => {
   };
 
   return (
-    <TouchableOpacity onPress={_handleOnPress}>
-      <View style={styles.container}>
-        <Text style={styles.text}>{props.children}</Text>
-      </View>
+    <TouchableOpacity style={styles.container} onPress={_handleOnPress}>
+      <Text style={styles.text}>{props.children}</Text>
     </TouchableOpacity>
   );
 };
