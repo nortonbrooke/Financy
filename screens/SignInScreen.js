@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
-import Header from "../components/Header";
-import Button from "../components/Button";
+import Header from "../components/Headers/Header";
+import Button from "../components/Buttons/Button";
 import Link from "../components/Link";
 import TextInput from "../components/TextInput";
 import { AppContext } from "../contexts/app";

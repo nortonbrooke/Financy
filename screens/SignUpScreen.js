@@ -1,8 +1,8 @@
 import * as WebBrowser from "expo-web-browser";
 import React, { useContext, useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
-import Header from "../components/Header";
-import Button from "../components/Button";
+import Header from "../components/Headers/Header";
+import Button from "../components/Buttons/Button";
 import Link from "../components/Link";
 import Text from "../components/Text";
 import TextInput from "../components/TextInput";
@@ -101,7 +101,9 @@ export default function SignUpScreen({ navigation }) {
           </Link>
         </TextInput>
         <View style={styles.validationContainer}>
-          <View style={styles.validationTextContainer}><Text>Password requirements:</Text></View>
+          <View style={styles.validationTextContainer}>
+            <Text>Password requirements:</Text>
+          </View>
           <View style={styles.validationItemContainer}>
             <View
               style={{
@@ -203,7 +205,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   validationContainer: {
-    marginBottom: 20
+    marginBottom: 20,
   },
   validationTextContainer: {
     display: "flex",
