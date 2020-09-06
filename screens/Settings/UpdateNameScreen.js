@@ -26,11 +26,11 @@ const UpdateNameScreen = ({ navigation, route }) => {
         .update({
           name,
         })
-        .then(function () {
+        .then(() => {
           setLoading(false);
           navigation.navigate("Account");
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error.message);
           setLoading(false);
           alert(
