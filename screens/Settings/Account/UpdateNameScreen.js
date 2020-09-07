@@ -5,11 +5,13 @@ import BackButton from "../../../components/Buttons/BackButton";
 import Header from "../../../components/Headers/Header";
 import TextInput from "../../../components/TextInput";
 import { APIContext } from "../../../contexts/api";
+import { UserContext } from "../../../contexts/user";
 import { ThemeContext } from "../../../contexts/theme";
 import { isEmpty } from "lodash";
 
 const UpdateNameScreen = ({ navigation, route }) => {
   const { users } = useContext(APIContext);
+  const user = useContext(UserContext);
   const theme = useContext(ThemeContext);
 
   const [name, setName] = useState("");
@@ -53,7 +55,7 @@ const UpdateNameScreen = ({ navigation, route }) => {
         <View style={styles.formContainer}>
           <Header>Update Name</Header>
           <TextInput
-            placeholder={route.params.name}
+            placeholder={user.name}
             autoFocus={true}
             onChangeText={setName}
           ></TextInput>

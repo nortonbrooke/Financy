@@ -19,6 +19,7 @@ import {
 import AsyncStorage from "@react-native-community/async-storage";
 import { APIContext } from "./contexts/api";
 import { AuthProvider } from "./contexts/auth";
+import { UserProvider } from "./contexts/user";
 import { ThemeProvider, themes } from "./contexts/theme";
 import useCachedResources from "./hooks/useCachedResources";
 import useUser from "./hooks/useUser";
@@ -40,11 +41,11 @@ const Stack = createStackNavigator();
 export default function App(props) {
   // Resources
   const resourcesLoaded = useCachedResources();
-  const user = useUser();
 
-  // Authentication
+  // Authentication & User
   const { auth, users } = useContext(APIContext);
   const [authState, authDispatch] = useReducer(authReducer, authInitialState);
+  const user = useUser();
 
   // Theme
   const colorScheme = Appearance.getColorScheme();
@@ -107,7 +108,7 @@ export default function App(props) {
     }
   };
 
-  const authService = useMemo(
+  const authMemo = useMemo(
     () => ({
       signIn: async (data) => {
         try {
@@ -243,19 +244,21 @@ export default function App(props) {
   } else {
     return (
       <View style={styles.container}>
-        <AuthProvider value={authService}>
-          <ThemeProvider value={theme}>
-            <StatusBar barStyle={styleStatusBar} />
-            <NavigationContainer linking={LinkingConfiguration}>
-              <Stack.Navigator>
-                {authState.userToken == null ? (
-                  <Stack.Screen name="AuthRoot" component={AuthNavigator} />
-                ) : (
-                  <Stack.Screen name="AppRoot" component={AppNavigator} />
-                )}
-              </Stack.Navigator>
-            </NavigationContainer>
-          </ThemeProvider>
+        <AuthProvider value={authMemo}>
+          <UserProvider value={user}>
+            <ThemeProvider value={theme}>
+              <StatusBar barStyle={styleStatusBar} />
+              <NavigationContainer linking={LinkingConfiguration}>
+                <Stack.Navigator>
+                  {authState.userToken == null ? (
+                    <Stack.Screen name="AuthRoot" component={AuthNavigator} />
+                  ) : (
+                    <Stack.Screen name="AppRoot" component={AppNavigator} />
+                  )}
+                </Stack.Navigator>
+              </NavigationContainer>
+            </ThemeProvider>
+          </UserProvider>
         </AuthProvider>
       </View>
     );

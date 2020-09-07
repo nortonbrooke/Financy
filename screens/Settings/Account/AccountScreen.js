@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import moment from "moment";
 import { SafeAreaView, View, ScrollView, StyleSheet, Text } from "react-native";
+import { UserContext } from "../../../contexts/user";
 import { ThemeContext } from "../../../contexts/theme";
-import useUser from "../../../hooks/useUser";
 import BackButton from "../../../components/Buttons/BackButton";
 import Header from "../../../components/Headers/Header";
 import StyledButton from "../../../components/Buttons/StyledButton";
@@ -10,8 +10,8 @@ import StackButton from "../../../components/Buttons/StackButton";
 import Colors from "../../../constants/Colors";
 
 export default function AccountScreen({ navigation }) {
+  const user = useContext(UserContext);
   const theme = useContext(ThemeContext);
-  const user = useUser();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
@@ -29,7 +29,6 @@ export default function AccountScreen({ navigation }) {
                 onPress={() =>
                   navigation.navigate({
                     name: "UpdateName",
-                    params: { name: user.name },
                   })
                 }
               ></StackButton>

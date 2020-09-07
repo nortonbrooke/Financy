@@ -13,15 +13,17 @@ import {
 import BackButton from "../../../components/Buttons/BackButton";
 import Header from "../../../components/Headers/Header";
 import { APIContext } from "../../../contexts/api";
+import { UserContext } from "../../../contexts/user";
 import { ThemeContext } from "../../../contexts/theme";
 import Colors from "../../../constants/Colors";
 import { isEmpty, isNull } from "lodash";
 
 const ThemeScreen = ({ navigation, route }) => {
   const { users } = useContext(APIContext);
+  const user = useContext(UserContext);
   const theme = useContext(ThemeContext);
 
-  const [selectedTheme, setSelectedTheme] = useState(route.params.theme);
+  const [selectedTheme, setSelectedTheme] = useState(user.preferences.theme);
 
   // Helpers
   const _handleOnSave = (theme) => {
