@@ -16,7 +16,7 @@ export default function AccountScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <View style={styles.contentContainer}>
-        <BackButton onPress={() => navigation.navigate("SettingsHome")}>
+        <BackButton onPress={() => navigation.navigate("SettingsIndex")}>
           Settings
         </BackButton>
         {user ? (
@@ -41,7 +41,7 @@ export default function AccountScreen({ navigation }) {
                 label="Password"
                 onPress={() =>
                   navigation.navigate({
-                    name: "UpdatePassword",
+                    name: "ChangePassword",
                   })
                 }
               ></StackButton>

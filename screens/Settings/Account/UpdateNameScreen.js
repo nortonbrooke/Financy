@@ -9,7 +9,7 @@ import { UserContext } from "../../../contexts/user";
 import { ThemeContext } from "../../../contexts/theme";
 import { isEmpty } from "lodash";
 
-const UpdateNameScreen = ({ navigation, route }) => {
+export default function UpdateNameScreen({ navigation }) {
   const { users } = useContext(APIContext);
   const user = useContext(UserContext);
   const theme = useContext(ThemeContext);
@@ -79,5 +79,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-export default UpdateNameScreen;

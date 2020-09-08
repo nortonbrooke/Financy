@@ -10,6 +10,11 @@ export default {
         Money: 'money',
         Analyze: 'analyze',
         Settings: 'settings',
+        Account: 'settings/account',
+        ChangePassword: 'settings/account/change-password',
+        UpdateName: 'settings/account/update-name',
+        Appearance: 'settings/preferences/app-appearance',
+        Theme: 'settings/preferences/app-appearance/theme',
         SignIn: 'signin',
         SignUp: 'signup',
         ResetPassword:'reset-password'

@@ -11,7 +11,7 @@ import { ThemeContext } from "../../../contexts/theme";
 import { validator } from "../../../util";
 import { isEmpty } from "lodash";
 
-const UpdateNameScreen = ({ navigation }) => {
+export default function ChangePasswordScreen({ navigation }) {
   const { auth } = useContext(APIContext);
   const theme = useContext(ThemeContext);
 
@@ -131,5 +131,3 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
-export default UpdateNameScreen;

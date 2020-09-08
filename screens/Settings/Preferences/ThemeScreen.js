@@ -18,7 +18,7 @@ import { ThemeContext } from "../../../contexts/theme";
 import Colors from "../../../constants/Colors";
 import { isEmpty, isNull } from "lodash";
 
-const ThemeScreen = ({ navigation, route }) => {
+export default function ThemeScreen({ navigation }) {
   const { users } = useContext(APIContext);
   const user = useContext(UserContext);
   const theme = useContext(ThemeContext);
@@ -110,7 +110,7 @@ const ThemeScreen = ({ navigation, route }) => {
       </View>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   contentContainer: {
@@ -135,5 +135,3 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
 });
-
-export default ThemeScreen;

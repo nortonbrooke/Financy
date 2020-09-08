@@ -1,17 +1,74 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
 import React, { useContext } from "react";
-import { ThemeContext } from "../contexts/theme";
 import TabBarIcon from "../components/TabBarIcon";
 import HomeScreen from "../screens/HomeScreen";
 import MoneyScreen from "../screens/MoneyScreen";
 import AnalyzeScreen from "../screens/AnalyzeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
+import {
+  AccountScreen,
+  ChangePasswordScreen,
+  UpdateNameScreen,
+} from "../screens/Settings/Account";
+import { AppearanceScreen, ThemeScreen } from "../screens/Settings/Preferences";
+import { ThemeContext } from "../contexts/theme";
 import Colors from "../constants/Colors";
 import { isEmpty } from "lodash";
 
 const INITIAL_ROUTE_NAME = "Home";
 
 const Tab = createBottomTabNavigator();
+const SettingsStack = createStackNavigator();
+
+const SettingsStackScreen = () => {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen
+        name="SettingsIndex"
+        component={SettingsScreen}
+        options={{
+          title: "SettingsIndex",
+        }}
+      />
+      <SettingsStack.Screen
+        name="Account"
+        component={AccountScreen}
+        options={{
+          title: "Account Information",
+        }}
+      />
+      <SettingsStack.Screen
+        name="UpdateName"
+        component={UpdateNameScreen}
+        options={{
+          title: "Update Name",
+        }}
+      />
+      <SettingsStack.Screen
+        name="ChangePassword"
+        component={ChangePasswordScreen}
+        options={{
+          title: "Change Password",
+        }}
+      />
+      <SettingsStack.Screen
+        name="Appearance"
+        component={AppearanceScreen}
+        options={{
+          title: "App Appearance",
+        }}
+      />
+      <SettingsStack.Screen
+        name="Theme"
+        component={ThemeScreen}
+        options={{
+          title: "Theme",
+        }}
+      />
+    </SettingsStack.Navigator>
+  );
+};
 
 export default function TabNavigator({ navigation, route }) {
   const theme = useContext(ThemeContext);
@@ -91,7 +148,7 @@ export default function TabNavigator({ navigation, route }) {
       />
       <Tab.Screen
         name="Settings"
-        component={SettingsScreen}
+        component={SettingsStackScreen}
         options={{
           title: "Settings",
           tabBarIcon: ({ focused }) => (
@@ -107,7 +164,7 @@ function getHeaderTitle(route) {
   const currentRoute = route.state?.routes[route.state.index];
 
   // Check for nested route
-  if (currentRoute?.state?.routes[0]?.state?.index > 0) {
+  if (currentRoute?.state?.routes?.length > 1) {
     return "";
   }
 

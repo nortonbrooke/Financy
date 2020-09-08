@@ -13,7 +13,7 @@ export default function AppearanceScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <View style={styles.contentContainer}>
-        <BackButton onPress={() => navigation.navigate("SettingsHome")}>
+        <BackButton onPress={() => navigation.navigate("SettingsIndex")}>
           Settings
         </BackButton>
         {user ? (
