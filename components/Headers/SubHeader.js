@@ -11,7 +11,6 @@ const SubHeader = (props) => {
       style={{
         fontSize: 20,
         fontWeight: "bold",
-        marginBottom: 5,
         color: theme.foreground,
       }}
     />

@@ -1,5 +1,4 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import React, {
   useContext,
   useEffect,
@@ -36,7 +35,6 @@ import SplashScreen from "./screens/SplashScreen";
 import { get, isEqual } from "lodash";
 
 const DEFAULT_THEME = "light";
-const Stack = createStackNavigator();
 
 export default function App(props) {
   // Resources
@@ -243,19 +241,22 @@ export default function App(props) {
     return <Text>Checking auth...</Text>; // TODO: authenticating screen
   } else {
     return (
-      <View style={styles.container}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: theme.background,
+        }}
+      >
         <AuthProvider value={authMemo}>
           <UserProvider value={user}>
             <ThemeProvider value={theme}>
               <StatusBar barStyle={styleStatusBar} />
               <NavigationContainer linking={LinkingConfiguration}>
-                <Stack.Navigator>
-                  {authState.userToken == null ? (
-                    <Stack.Screen name="AuthRoot" component={AuthNavigator} />
-                  ) : (
-                    <Stack.Screen name="AppRoot" component={AppNavigator} />
-                  )}
-                </Stack.Navigator>
+                {authState.userToken === null ? (
+                  <AuthNavigator />
+                ) : (
+                  <AppNavigator />
+                )}
               </NavigationContainer>
             </ThemeProvider>
           </UserProvider>
@@ -264,9 +265,3 @@ export default function App(props) {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

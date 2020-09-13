@@ -3,7 +3,6 @@ import moment from "moment";
 import { SafeAreaView, View, ScrollView, StyleSheet, Text } from "react-native";
 import { UserContext } from "../../../contexts/user";
 import { ThemeContext } from "../../../contexts/theme";
-import BackButton from "../../../components/Buttons/BackButton";
 import Header from "../../../components/Headers/Header";
 import StyledButton from "../../../components/Buttons/StyledButton";
 import StackButton from "../../../components/Buttons/StackButton";
@@ -16,13 +15,10 @@ export default function AccountScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <View style={styles.contentContainer}>
-        <BackButton onPress={() => navigation.navigate("SettingsIndex")}>
-          Settings
-        </BackButton>
         {user ? (
           <ScrollView>
+            <Header>Account</Header>
             <View style={styles.sectionContainer}>
-              <Header>Account Information</Header>
               <StackButton
                 label="Name"
                 value={user.name}

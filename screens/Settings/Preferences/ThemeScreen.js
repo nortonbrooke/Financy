@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import BackButton from "../../../components/Buttons/BackButton";
 import Header from "../../../components/Headers/Header";
 import { APIContext } from "../../../contexts/api";
 import { UserContext } from "../../../contexts/user";
@@ -18,7 +17,7 @@ import { ThemeContext } from "../../../contexts/theme";
 import Colors from "../../../constants/Colors";
 import { isEmpty, isNull } from "lodash";
 
-export default function ThemeScreen({ navigation }) {
+export default function ThemeScreen({ }) {
   const { users } = useContext(APIContext);
   const user = useContext(UserContext);
   const theme = useContext(ThemeContext);
@@ -90,9 +89,7 @@ export default function ThemeScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <View style={styles.contentContainer}>
-        <BackButton onPress={() => navigation.navigate("Appearance")}>
-          Back
-        </BackButton>
+       
         <View style={styles.formContainer}>
           <Header>Choose Theme</Header>
           <FlatList

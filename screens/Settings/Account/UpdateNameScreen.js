@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { SafeAreaView, StyleSheet, View, Alert } from "react-native";
 import Button from "../../../components/Buttons/Button";
-import BackButton from "../../../components/Buttons/BackButton";
 import Header from "../../../components/Headers/Header";
 import TextInput from "../../../components/TextInput";
 import { APIContext } from "../../../contexts/api";
@@ -51,7 +50,6 @@ export default function UpdateNameScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <View style={styles.contentContainer}>
-        <BackButton onPress={() => navigation.navigate("Account")}>Back</BackButton>
         <View style={styles.formContainer}>
           <Header>Update Name</Header>
           <TextInput
@@ -60,7 +58,7 @@ export default function UpdateNameScreen({ navigation }) {
             onChangeText={setName}
           ></TextInput>
           <Button onPress={_handleOnSave}>
-            {loading ? "Processing..." : "Continue"}
+            {loading ? "Updating..." : "Continue"}
           </Button>
         </View>
       </View>

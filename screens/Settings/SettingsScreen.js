@@ -6,12 +6,13 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import StackButton from "../components/Buttons/StackButton";
-import StyledButton from "../components/Buttons/StyledButton";
-import SubHeader from "../components/Headers/SubHeader";
-import { ThemeContext } from "../contexts/theme";
-import { AuthContext } from "../contexts/auth";
-import Colors from "../constants/Colors";
+import StackButton from "../../components/Buttons/StackButton";
+import StyledButton from "../../components/Buttons/StyledButton";
+import Header from "../../components/Headers/Header";
+import SubHeader from "../../components/Headers/SubHeader";
+import { ThemeContext } from "../../contexts/theme";
+import { AuthContext } from "../../contexts/auth";
+import Colors from "../../constants/Colors";
 
 export default function SettingsScreen({ navigation }) {
   const theme = useContext(ThemeContext);
@@ -29,6 +30,7 @@ export default function SettingsScreen({ navigation }) {
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <View style={styles.contentContainer}>
         <ScrollView>
+        <Header>Settings</Header>
           <View style={styles.sectionContainer}>
             <SubHeader>Account</SubHeader>
             <StackButton

@@ -11,7 +11,7 @@ const Header = (props) => {
       style={{
         fontSize: 26,
         fontWeight: "bold",
-        marginBottom: 10,
+        marginBottom: 20,
         color: theme.foreground,
       }}
     />

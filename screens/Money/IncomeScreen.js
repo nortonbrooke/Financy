@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { SafeAreaView, View, ScrollView, StyleSheet } from "react-native";
-import { ThemeContext } from "../contexts/theme";
+import { ThemeContext } from "../../contexts/theme";
 
-export default function AnalyzeScreen() {
+export default function IncomeScreen() {
   const theme = useContext(ThemeContext);
 
   return (
@@ -19,12 +19,8 @@ export default function AnalyzeScreen() {
   );
 }
 
-AnalyzeScreen.navigationOptions = {
-  header: null,
-};
-
 const styles = StyleSheet.create({
   contentContainer: {
-    padding: 10,
+    paddingHorizontal: 15,
   },
 });

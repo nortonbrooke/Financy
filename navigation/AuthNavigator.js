@@ -1,26 +1,18 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import React, { useContext } from "react";
-import { ThemeContext } from "../contexts/theme";
+import React from "react";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import ResetPassword from "../screens/ResetPassword";
 
 const Stack = createStackNavigator();
 
-export default function StackNavigator({ navigation, route }) {
-  const theme = useContext(ThemeContext);
-
-  navigation.setOptions({
-    headerStyle: {
-      backgroundColor: theme.background,
-      borderBottomWidth: 0,
-      shadowColor: "transparent",
-    },
-    headerTitle: "",
-  });
-
+export default function StackNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}
